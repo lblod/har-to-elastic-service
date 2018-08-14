@@ -55,11 +55,15 @@ do
     sleep 0.5
 done
 
-while true
-do
+if [ -z $LOAD_INTERVAL ];then
     load_files
-    sleep $LOAD_INTERVAL
-done
+else
+    while true
+    do
+        load_files
+        sleep $LOAD_INTERVAL
+    done
+fi
 
 
 

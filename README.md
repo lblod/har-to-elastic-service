@@ -6,7 +6,7 @@ Configuration is done via environment variables
 
 * `DATA_FOLDER`: folder that has har files to be stored in elastic search.
 * `PROCESSED_FOLDER`: folder where uploaded har files are moved to
-* `LOAD_INTERVAL`: interval to scan the data folder, set to false to disable.
+* `LOAD_INTERVAL`: interval to scan the data folder, set to empty string to disable.
 
 ## usage
 

@@ -34,13 +34,12 @@ load_files() {
         count=`jq '.log.entries | length' < $x`
         if [[ "$count" -gt "0" ]]; then
             info "Posting $x to $ELASTIC_HOST"
-            jq -c -r '.log.entries[]' < $x | while read entry
+            jq -c -r '.log.entries[]' < $x | while read -r entry
             do
-                echo $entry
-                echo
-                echo
-                curl -XPOST -H 'Content-Type: application/json' -d "$entry"  "http://${ELASTIC_HOST}:9200/hars/har?pretty"
+                echo -e "$entry" > .post
+                curl -XPOST -H 'Content-Type: application/json' -d '@.post'  "http://${ELASTIC_HOST}:9200/hars/har?pretty"
             done
+            rm .post
             sleep 0.5
         else
             info "ignoring empty file $x"

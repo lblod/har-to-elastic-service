@@ -31,22 +31,27 @@ load_files() {
     # Find all .trans.har files in the specified folder/
     # For each one, post to ElasticSearch.
     for x in $HAR_FOLDER/*.trans.har;do
-        info "Posting $x to $ELASTIC_HOST"
-        jq -c -r '.log.entries[]' < $x | while read entry
-        do
-            echo $entry
-            echo
-            echo
-            curl -XPOST -H 'Content-Type: application/json' -d "$entry"  "http://${ELASTIC_HOST}:9200/hars/har?pretty"
-        done
-        sleep 0.5
+        count=`jq '.log.entries | length' < $x`
+        if [[ "$count" -gt "0" ]]; then
+            info "Posting $x to $ELASTIC_HOST"
+            jq -c -r '.log.entries[]' < $x | while read entry
+            do
+                echo $entry
+                echo
+                echo
+                curl -XPOST -H 'Content-Type: application/json' -d "$entry"  "http://${ELASTIC_HOST}:9200/hars/har?pretty"
+            done
+            sleep 0.5
+        else
+            info "ignoring empty file $x"
+        fi
         mv $x $PROCESSED_FOLDER
     done
 }
 
 LOAD_INTERVAL=${LOAD_INTERVAL:-60}
 HAR_FOLDER=${HAR_FOLDER:-/data/hars}
-PROCESSED_FOLDER=${PROCESSED_FOLDER:/data/processed}
+PROCESSED_FOLDER=${PROCESSED_FOLDER:-/data/processed}
 
 info "ElasticSearch host: ${ELASTIC_HOST}"
 while poll $ELASTIC_HOST

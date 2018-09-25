@@ -59,6 +59,9 @@ do
     sleep 0.5
 done
 
+info "increasing total fields limit of hars index"
+curl -XPUT -H 'Content-Type: application/json' -d '{"index.mapping.total_fields.limit": 10000}'  "http://${ELASTIC_HOST}:9200/hars/_settings"
+
 if [ -z $LOAD_INTERVAL ];then
     load_files
 else

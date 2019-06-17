@@ -11,4 +11,4 @@ Configuration is done via environment variables
 ## usage
 
 # one off load
-`docker run --rm -v /your/processed/folder:/data/processed -v /your/hars/folder:/data/hars -e LOAD_INTERVAL=false  lblod/har-to-elastic-service`
+`docker run --rm -v /your/processed/folder:/data/processed -v /your/hars/folder:/data/hars -e LOAD_INTERVAL=""  lblod/har-to-elastic-service`

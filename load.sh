@@ -60,6 +60,7 @@ do
 done
 
 info "increasing total fields limit of hars index"
+curl -XPUT "http://${ELASTIC_HOST}:9200/hars"
 curl -XPUT -H 'Content-Type: application/json' -d '{"index.mapping.total_fields.limit": 10000}'  "http://${ELASTIC_HOST}:9200/hars/_settings"
 
 if [ -z $LOAD_INTERVAL ];then
